@@ -51,12 +51,13 @@ const RestaurantsComponent = ({ masterData, handleFavorite }) => {
 };
 
 const SearchRestaurant = () => {
+    const [categories] = api.category.getCategories.useSuspenseQuery();
+    const [restaurants] = api.restaurant.getRestaurants.useSuspenseQuery();
+
     const [isLoading, setIsLoading] = useState(true);
     const [inputValue, setInputValue] = useState('');
     const [categorySelected, setCategorySelected] = useState('');
 
-    const [categories] = api.category.getCategories.useSuspenseQuery();
-    const [restaurants] = api.restaurant.getRestaurants.useSuspenseQuery();
     const [restaurantsByCategoryId] = api.restaurant.getByCategoryId.useSuspenseQuery({ id: categorySelected });
     const mutationUpdateFavorite = api.restaurant.updateFavorite.useMutation();
 

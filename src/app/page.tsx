@@ -13,3 +13,4 @@ export default async function Home() {
     </HydrateClient>
   );
 }
+export const runtime = "edge"
