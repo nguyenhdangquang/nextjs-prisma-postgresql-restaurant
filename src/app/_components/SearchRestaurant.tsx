@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, ChangeEvent, MouseEventHandler} from 'react';
 import { FaStar } from "react-icons/fa";
 import { BsStars } from "react-icons/bs";
 import { GoHeartFill } from "react-icons/go";
@@ -12,8 +12,9 @@ import Loading from "~/app/_components/common/Loading";
 
 import { api } from "~/trpc/react";
 import {categoryKRLanguage, cityKRLanguage} from "~/app/constants";
+import {Restaurant} from "~/models";
 
-const RestaurantsComponent = ({ masterData, handleFavorite }) => {
+const RestaurantsComponent = ({ masterData, handleFavorite }: { masterData: Restaurant[], handleFavorite: (id: string, isFavorite: boolean) => MouseEventHandler }) => {
     return (
             <div className="flex flex-col items-center overflow-y-scroll overflow-auto scrollbar-hide">
                 {masterData?.length && masterData.map((restaurant) => (
@@ -41,7 +42,7 @@ const RestaurantsComponent = ({ masterData, handleFavorite }) => {
                                     <p className="ml-1 text-[#344054] text-sm">{`${restaurant.rating}(2)`}</p>
                                 </div>
                             </div>
-                            <p className="text-[#344054] text-sm truncate">{restaurant.description}</p>
+                            <p className="text-[#344054] text-sm truncate">{restaurant.desc}</p>
                             <p className="text-[#344054] text-sm">{`${cityKRLanguage[`${restaurant.city}`]} · ${categoryKRLanguage[`${restaurant.category.name}`]} · ${restaurant.price_range}만원`}</p>
                         </div>
                     </div>
@@ -54,14 +55,14 @@ const SearchRestaurant = () => {
     const [categories] = api.category.getCategories.useSuspenseQuery();
     const [restaurants] = api.restaurant.getRestaurants.useSuspenseQuery();
 
-    const [isLoading, setIsLoading] = useState(true);
-    const [inputValue, setInputValue] = useState('');
-    const [categorySelected, setCategorySelected] = useState('');
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [inputValue, setInputValue] = useState<string>('');
+    const [categorySelected, setCategorySelected] = useState<string>('');
 
     const [restaurantsByCategoryId] = api.restaurant.getByCategoryId.useSuspenseQuery({ id: categorySelected });
     const mutationUpdateFavorite = api.restaurant.updateFavorite.useMutation();
 
-    const [listRestaurants, setListRestaurants] = useState([]);
+    const [listRestaurants, setListRestaurants] = useState<Restaurant[]>([]);
 
     useEffect(() => {
         if (restaurantsByCategoryId?.length) {
@@ -75,7 +76,7 @@ const SearchRestaurant = () => {
         }
     }, [restaurants, restaurantsByCategoryId])
 
-    const handleInputChange = (e) => {
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
         if (categorySelected && restaurantsByCategoryId?.length) {
             const restaurantsFilteredByCategoryId = restaurantsByCategoryId.filter(res => res.name.startsWith(e.target.value))
