@@ -37,4 +37,4 @@ You can check out the [GitHub repository](https://github.com/nguyenhdangquang/ne
 
 ## Deployment app
 
-Follow our deployment link at [Vercel]()
+Follow our deployment link at [Vercel](https://nextjs-prisma-trpc-postgresql-restaurant.vercel.app/)
