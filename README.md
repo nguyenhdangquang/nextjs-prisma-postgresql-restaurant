@@ -30,7 +30,7 @@ Techstack from this project:
     :+1: No data found implementation
     
 ## Demonstrated    
-(https://github.com/nguyenhdangquang@gmail.com/assets/e402849f-da3b-4aa4-8c57-f12ddffac5ee)
+https://github.com/user-attachments/assets/e402849f-da3b-4aa4-8c57-f12ddffac5ee
 
 ## Github Repository
 You can check out the [GitHub repository](https://github.com/nguyenhdangquang/nextjs-prisma-trpc-postgresql-restaurant.git) — your feedback and contributions are welcome!
