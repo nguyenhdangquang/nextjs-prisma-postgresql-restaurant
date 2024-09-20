@@ -32,10 +32,10 @@ Techstack from this project:
 ## Demonstrated    
 https://github.com/user-attachments/assets/31b3b540-1884-42eb-ad28-b096e001b4dd
 
+## Deployment app
+Follow our deployment link at [Vercel](https://nextjs-prisma-trpc-postgresql-restaurant.vercel.app/)
+
 ## Github Repository
 You can check out the [GitHub repository](https://github.com/nguyenhdangquang/nextjs-prisma-trpc-postgresql-restaurant.git) — your feedback and contributions are welcome!
 
-## Deployment app
-
-Follow our deployment link at [Vercel](https://nextjs-prisma-trpc-postgresql-restaurant.vercel.app/)
 > [!NOTE] - The web app will take a little bit glitchy cause deploy Vercel with using PostgreSQL cloud.
