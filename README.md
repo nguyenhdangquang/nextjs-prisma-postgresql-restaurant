@@ -18,7 +18,7 @@ Techstack from this project:
 - [tRPC](https://trpc.io)
 - [PostgreSQL](https://www.postgresql.org/)
 
-> [!NOTE]
+
 ## Keys of Implementation:
     :+1: Setup Prisma ORM connect with PostgreSQL (checkout config at ./start-database.sh - Linux or OS)
     :+1: Setup Prisma built using tRPC 
@@ -38,3 +38,4 @@ You can check out the [GitHub repository](https://github.com/nguyenhdangquang/ne
 ## Deployment app
 
 Follow our deployment link at [Vercel](https://nextjs-prisma-trpc-postgresql-restaurant.vercel.app/)
+> [!NOTE] - The web app will take a little bit glitchy cause deploy Vercel with using PostgreSQL cloud.
