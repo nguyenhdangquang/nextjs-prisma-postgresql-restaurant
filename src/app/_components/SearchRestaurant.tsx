@@ -72,7 +72,7 @@ const RestaurantsComponent = ({ masterData, handleFavorite, isLoading, restIdSel
 const SearchRestaurant = () => {
     const [categories] = api.category.getCategories.useSuspenseQuery();
     const [restaurants] = api.restaurant.getRestaurants.useSuspenseQuery();
-
+    const utils = api.useUtils();
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [inputValue, setInputValue] = useState<string>('');
     const [restId, setRestId] = useState<string>('');
@@ -84,26 +84,17 @@ const SearchRestaurant = () => {
     const [listRestaurants, setListRestaurants] = useState<Restaurant[]>([]);
 
     useEffect(() => {
-        if (restaurantsByCategoryId?.length) {
-            setListRestaurants([...restaurantsByCategoryId] ?? []);
+        if (categorySelected) {
+            setListRestaurants(restaurantsByCategoryId?.length ? [...restaurantsByCategoryId].filter(res => res.name.startsWith(inputValue)) : []);
             setIsLoading(false);
             return;
         }
-        if (restaurants) {
-            setListRestaurants([...restaurants] ?? []);
-            setIsLoading(false);
-        }
-    }, [restaurants, restaurantsByCategoryId])
+        setListRestaurants(restaurants?.length ? [...restaurants].filter(res => res.name.startsWith(inputValue)) : []);
+        setIsLoading(false);
+    }, [categorySelected, restaurants, restaurantsByCategoryId, inputValue])
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setInputValue(e.target.value);
-        if (categorySelected && restaurantsByCategoryId?.length) {
-            const restaurantsFilteredByCategoryId = restaurantsByCategoryId.filter(res => res.name.startsWith(e.target.value))
-            setListRestaurants([...restaurantsFilteredByCategoryId])
-            return;
-        }
-        const restFiltered = restaurants.filter(res => res.name.startsWith(e.target.value))
-        setListRestaurants([...restFiltered])
     };
 
     const handleOnSelectCategory = (id: string) => () => {
@@ -117,22 +108,18 @@ const SearchRestaurant = () => {
 
     const handleFavorite = (id: string, isFavorite: boolean) => async () => {
         setRestId(id)
-        const restaurantUpdated = await mutationUpdateFavorite.mutateAsync({
+        await mutationUpdateFavorite.mutateAsync({
             id,
             isFavorite: !isFavorite,
         },{
             onSuccess: () => {
-                setRestId('')
+                setRestId('');
+                if (categorySelected) {
+                    return utils.restaurant.getByCategoryId.invalidate();
+                }
+                utils.restaurant.getRestaurants.invalidate();
             }
         });
-        setListRestaurants([...listRestaurants.map(res => {
-            if (res.id === restaurantUpdated.id) {
-                return {
-                    ...restaurantUpdated
-                }
-            }
-            return res
-        })])
     }
 
     return (

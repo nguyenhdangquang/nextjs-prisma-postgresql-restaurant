@@ -5,7 +5,7 @@ import { Restaurant } from "~/models";
 export const restaurantRouter = createTRPCRouter({
     getRestaurants: publicProcedure.query(async ({ ctx }) => {
         const restaurants: Restaurant[] = await ctx.db.restaurant.findMany({
-            orderBy: { createdAt: "asc" },
+            orderBy: { updatedAt: "desc" },
             include: {
                 category: true
             }
@@ -18,7 +18,7 @@ export const restaurantRouter = createTRPCRouter({
         let restaurants: Restaurant[];
         if (!input.id) {
             restaurants = await ctx.db.restaurant.findMany({
-                orderBy: { createdAt: "asc" },
+                orderBy: { updatedAt: "desc" },
                 include: {
                     category: true
                 }
@@ -42,7 +42,8 @@ export const restaurantRouter = createTRPCRouter({
                 id: input.id
             },
             data: {
-                isFavorite: input.isFavorite
+                isFavorite: input.isFavorite,
+                updatedAt: new Date()
             },
             include: {
                 category: true
