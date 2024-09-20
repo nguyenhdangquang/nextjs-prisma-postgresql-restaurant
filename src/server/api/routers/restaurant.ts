@@ -1,9 +1,10 @@
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { Restaurant } from "~/models";
 
 export const restaurantRouter = createTRPCRouter({
     getRestaurants: publicProcedure.query(async ({ ctx }) => {
-        const restaurants = await ctx.db.restaurant.findMany({
+        const restaurants: Restaurant[] = await ctx.db.restaurant.findMany({
             orderBy: { createdAt: "asc" },
             include: {
                 category: true
@@ -14,7 +15,17 @@ export const restaurantRouter = createTRPCRouter({
     }),
 
     getByCategoryId: publicProcedure.input(z.object( { id: z.string() })).query(async ({ ctx, input }) => {
-        const restaurants = await ctx.db.restaurant.findMany({
+        let restaurants: Restaurant[];
+        if (!input.id) {
+            restaurants = await ctx.db.restaurant.findMany({
+                orderBy: { createdAt: "asc" },
+                include: {
+                    category: true
+                }
+            })
+            return restaurants ?? []
+        }
+        restaurants = await ctx.db.restaurant.findMany({
             where: {
                 categoryId: input.id
             },
